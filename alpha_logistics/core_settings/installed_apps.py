@@ -1,4 +1,5 @@
 INSTALLEDAPPS = [
+    'authuser',    
     'cargo_types',
     'categories',
     'dispatch',

@@ -28,8 +28,6 @@ AUTH_USER_MODEL = 'authuser.CustomUser'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'authuser', 
-    'core',
     'django_countries',
     'django.contrib.auth',
     'django.contrib.contenttypes',
