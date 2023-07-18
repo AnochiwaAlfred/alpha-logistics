@@ -1,7 +1,7 @@
 from ninja import NinjaAPI
 from ninja.security import django_auth
 from ninja.security import HttpBearer
-from authuser.models import User
+from authuser.models import CustomUser
 from django.http import HttpResponseForbidden,response
 from http import HTTPStatus
 
@@ -19,13 +19,14 @@ from apis.v1.tasks import router as tasks_router
 class GlobalAuth(HttpBearer):
     def authenticate(self, request, token):
         # user =  User.objects.all().filter(encoded=token,is_token_verified=True)
-        user =  User.objects.all().filter(encoded=token)
+        user =  CustomUser.objects.all().filter(encoded=token)
         if user.exists():
             foundUser = user.get()
             return foundUser.encoded
       
-# api = NinjaAPI(auth=GlobalAuth())
-api=NinjaAPI()
+api = NinjaAPI(auth=GlobalAuth())
+# api = NinjaAPI()
+
 
 api.add_router("/auth/", auth_router)
 api.add_router("/cargo-type/", cargo_type_router)

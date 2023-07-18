@@ -6,7 +6,7 @@ PRODUCTS_DISPLAY = ['name', 'category_id', 'user_id', 'weight', 'created']
 class Product(CoreBaseModel):
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    user_id = models.ForeignKey('authuser.User', on_delete=models.CASCADE, related_name='product_user', null=True)
+    user_id = models.ForeignKey('authuser.Vendor', on_delete=models.CASCADE, related_name='product_user', null=True)
     category_id = models.ForeignKey('categories.Category', on_delete=models.CASCADE, related_name='category', null=True)
     weight = models.IntegerField()
     

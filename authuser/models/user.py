@@ -1,16 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, 
-    UserManager
+    UserManager,
+    PermissionsMixin
 )
 from django.utils import timezone
+from django_countries import countries
 
-ACCOUNT_TYPE = [
-    ('vendor','Vendor'),
-    ('agent','Agent'),
-    ('driver','Driver'),
-    ('users','users')
-]
 
 class CustomUserManager(UserManager):
     
@@ -37,18 +33,16 @@ class CustomUserManager(UserManager):
         return self._create_user(email, password, **extra_fields)
         
 
-class User(AbstractBaseUser):
+class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(('email address'), unique=True, error_messages="Email Already Taken")
     password = models.CharField(max_length=200)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    account_type = models.CharField(max_length=50, choices=ACCOUNT_TYPE, default='users')
     created = models.DateTimeField(auto_now_add=timezone.now())
     last_login = models.DateTimeField(blank=True, null=True)
     is_token_verified = models.BooleanField(default=False)
     token = models.CharField(max_length=300, blank=True, null=True)
     token_pin_id = models.CharField(max_length=300, blank=True, null=True)
-    phone = models.CharField(max_length=20)
     username = models.CharField(max_length=200, null=True, blank=True)
     
     # section for mananging api session login
@@ -57,7 +51,7 @@ class User(AbstractBaseUser):
     encoded  = models.CharField(max_length = 600, blank=True, null=True)
     encrypt_date = models.DateField(auto_now=False,default=timezone.now)
     rsa_duration = models.IntegerField(default=24)
-    
+
 
     objects = CustomUserManager()
 
@@ -70,19 +64,68 @@ class User(AbstractBaseUser):
         verbose_name_plural = "Users"
 
     def __str__(self):
-        return  self.email.split('@')[0]
+        return  self.email
         
     def get_username(self):
-        return  self.email.split('@')[0]
-        
-    def get_short_name(self):
-        return  self.email.split('@')[0]
+        return  self.username
 
     def natural_key(self):
         return  self.email.split('@')[0]
 
-    def has_module_perms(self, *args, **kwargs):
-        return self.is_staff
- 
-    def has_perm(self, *args, **kwargs):
-        return self.is_staff
+
+GENDER = (
+    ('Male', 'Male'),
+    ('Female', 'Female')
+)
+
+
+COUNTRY = tuple([(code, name) for code, name in countries])
+
+
+
+class Agent(CustomUser):
+    first_name = models.CharField(blank=False, max_length=50)
+    last_name = models.CharField(blank=False, max_length=50)
+    phone = models.CharField(blank=False, max_length=15)
+    address = models.TextField(blank=False)
+    
+    def save(self):
+        if not len(self.password) > 20:
+            super().set_password(self.password)
+            self.is_active=True
+            self.is_staff=True
+        super().save()
+    
+
+
+class Driver(CustomUser):
+    first_name = models.CharField(blank=False, max_length=50)
+    last_name = models.CharField(blank=False, max_length=50)
+    gender = models.CharField(max_length=6, choices=GENDER, blank=False)
+    phone = models.CharField(blank=False, max_length=15)
+    address = models.TextField(blank=False)
+    
+    # def save(self):
+    #     if not len(self.password) > 20:
+    #         super().set_password(self.password)
+    #         self.is_active=True
+    #         self.is_staff=True
+#         super().save()
+
+
+
+class Vendor(CustomUser):    
+    first_name = models.CharField(blank=False, max_length=50)
+    last_name = models.CharField(blank=False, max_length=50)
+    gender = models.CharField(max_length=6, choices=GENDER, blank=False)
+    phone = models.CharField(blank=False, max_length=15)
+    address = models.TextField(blank=False)
+    country = models.CharField(verbose_name='Country', max_length=200, choices=COUNTRY)
+    
+    # def save(self):
+    #     if not len(self.password) > 20:
+    #         super().set_password(self.password)
+    #         self.is_active=True
+    #         self.is_staff=True
+#         super().save()
+            

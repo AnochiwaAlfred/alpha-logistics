@@ -6,7 +6,7 @@ PAYMENTS_DISPLAY = ['id', 'order_id', 'user_id']
 
 class Payment(CoreBaseModel):
     order_id = models.ForeignKey('orders.Order', on_delete=models.CASCADE, related_name='payment_order', null=True)
-    user_id = models.ForeignKey('authuser.User', on_delete=models.CASCADE, related_name='user', null=True)
+    user_id = models.ForeignKey('authuser.CustomUser', on_delete=models.CASCADE, related_name='user', null=True)
     
     def __str__(self):
         return f"Payment {self.id}"

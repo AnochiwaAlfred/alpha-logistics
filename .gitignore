@@ -1,0 +1,3 @@
+migrate.sh
+makemigrations.sh
+db.sqlite3

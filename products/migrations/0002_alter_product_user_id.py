@@ -8,13 +8,13 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('authuser', '0002_customuser_groups_customuser_user_permissions'),
-        ('kyc', '0001_initial'),
+        ('products', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='kyc',
+            model_name='product',
             name='user_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='KYC_user', to='authuser.vendor'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='product_user', to='authuser.vendor'),
         ),
     ]

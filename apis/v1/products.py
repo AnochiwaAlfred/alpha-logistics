@@ -2,7 +2,7 @@ from ninja import Router, Form
 from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.products import *
 from products.models.products import *
-from authuser.models import User
+from authuser.models import CustomUser
 from categories.models import Category
 from typing import List
 
@@ -10,7 +10,7 @@ router = Router(tags=['Products'])
 
 @router.post('/add', response=ProductOutSchema)
 def add_product(request, user_id, category_id, data:ProductInSchema=Form(...)):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     category = get_object_or_404(Category, id=category_id)
     product = Product.objects.create(**data.dict())
     product.category_id = category
@@ -36,7 +36,7 @@ def update_product(request, id, data:ProductInSchema, user_id=None, category_id=
     for attr, value in data.dict().items():
         setattr(product, attr, value)
     if user_id!=None:
-        user = get_object_or_404(User, id=user_id)
+        user = get_object_or_404(CustomUser, id=user_id)
         product.user_id=user
     if category_id!=None:
         category = get_object_or_404(Category, id=category_id)

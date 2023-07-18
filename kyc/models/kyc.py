@@ -6,7 +6,7 @@ from django_countries import countries
 KYC_DISPLAY = ['user_id', 'first_name', 'last_name', 'country', 'state', 'city']
 COUNTRY_LIST =  tuple([(code, name) for code, name in countries])
 class KYC(CoreBaseModel):
-    user_id = models.ForeignKey('authuser.User', on_delete=models.CASCADE, related_name='KYC_user', null=True)
+    user_id = models.ForeignKey('authuser.Vendor', on_delete=models.CASCADE, related_name='KYC_user', null=True)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     country = models.CharField(max_length=200, choices=COUNTRY_LIST)

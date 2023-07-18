@@ -2,7 +2,7 @@ from ninja import Router
 from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.payments import *
 from payments.models.payments import *
-from authuser.models import User
+from authuser.models import CustomUser
 from orders.models import Order
 from typing import List
 
@@ -12,7 +12,7 @@ router = Router(tags=['Payments'])
 
 @router.post('/add', response=PaymentOutSchema)
 def add_payment(request, user_id, order_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     order = get_object_or_404(Order, id=order_id)
     payment = Payment.objects.create()
     payment.order_id = order
@@ -36,7 +36,7 @@ def list_payment(request):
 def update_payment(request, id, user_id=None, order_id=None):
     payment = get_object_or_404(Payment, id=id)
     if user_id!=None:
-        user = get_object_or_404(User, id=user_id)
+        user = get_object_or_404(CustomUser, id=user_id)
         payment.user_id=user
     if order_id!=None:
         order = get_object_or_404(Order, id=order_id)

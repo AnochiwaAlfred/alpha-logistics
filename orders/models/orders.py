@@ -5,7 +5,7 @@ from core.core import *
 ORDER_DISPLAY = ['id', 'user_id', 'created']
 
 class Order(CoreBaseModel):
-    user_id = models.ForeignKey('authuser.User', on_delete=models.CASCADE, related_name='order_user', null=True)
+    user_id = models.ForeignKey('authuser.Vendor', on_delete=models.CASCADE, related_name='order_user', null=True)
     product_id = models.ManyToManyField('products.Product', related_name='products')
     
     def __str__(self):

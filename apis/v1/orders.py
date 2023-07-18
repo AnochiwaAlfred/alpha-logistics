@@ -3,14 +3,14 @@ from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.orders import *
 from orders.models.orders import *
 from products.models.products import Product
-from authuser.models import User
+from authuser.models import CustomUser
 from typing import List
 
 router = Router(tags=['Orders'])
 
 @router.post('/add', response=OrderOutSchema)
 def add_order(request, user_id, product_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     product = get_object_or_404(Product, id=product_id)
     order = Order.objects.create()
     order.user_id = user
@@ -34,7 +34,7 @@ def list_order(request):
 def update_order(request, id, user_id=None, product_id=None):
     order = get_object_or_404(Order, id=id)
     if user_id!=None:
-        user = get_object_or_404(User, id=user_id)
+        user = get_object_or_404(CustomUser, id=user_id)
         order.user_id=user
     if product_id!=None:
         product = get_object_or_404(Product, id=product_id)

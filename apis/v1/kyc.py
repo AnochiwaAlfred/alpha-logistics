@@ -2,7 +2,7 @@ from ninja import Router, Form
 from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.kyc import *
 from kyc.models.kyc import *
-from authuser.models import User
+from authuser.models import CustomUser
 from typing import List
 from django_countries import countries
 
@@ -13,7 +13,7 @@ COUNTRY_REVERSE_DICT = {name:code for code, name in countries}
 
 @router.post('/add', response=KYCOutSchema)
 def add_kyc(request, user_id, data:KYCInSchema=Form(...)):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     client = KYC.objects.create(**data.dict())
     context = {}
     context.update(**data.dict())
@@ -40,7 +40,7 @@ def get_KYC(request, id):
 
 @router.put('/change/{id}', response=KYCOutSchema)
 def update_KYC(request, id, user_id, data:KYCInSchema):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     client = get_object_or_404(KYC, id=id)
     for attr, value in data.dict().items():
         setattr(client, attr, value)

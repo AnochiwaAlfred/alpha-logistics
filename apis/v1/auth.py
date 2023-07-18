@@ -12,7 +12,7 @@ router = Router(tags=['Authentication'])
 @router.get('/')
 def get_user(request):
     auth = request.auth
-    user =  User.objects.all().filter(encoded=auth).get()
+    user =  CustomUser.objects.all().filter(encoded=auth).get()
     return {
         'id':user.id,
         'username':user.username,
@@ -31,20 +31,22 @@ def get_token(request, username: str = Form(...), password: str = Form(...)):
         hh =  hasherGenerator()
         string_formatted = hh.get('encoded').decode('utf-8')
         hh.update({'rsa_duration':24,'encoded':string_formatted})
-        User.objects.all().filter(id=user.id).update(**hh)
+        CustomUser.objects.all().filter(id=user.id).update(**hh)
+        print(hh)
         return {'token':hh.get('encoded')}
     else: 
         return {'token':False}
         # User is authenticated
 
 
-
+# anochiwaalfred@gmail.com
+# Alfieolli
 @router.get("/verify-token/{otp}", auth=None)  # < overriding global auth
 def verify_token_code(request, otp:str):
     """
     Use method to verify otp code sent via sms and email
     """
-    user =  User.objects.all()
+    user =  CustomUser.objects.all()
     if user.filter(token=otp).exists():
         user =  user.filter(token=otp).get()
         pinid = user.token_pin_id
@@ -61,6 +63,6 @@ def verify_token_code(request, otp:str):
 @router.post("/logout")
 def logout(request):
     auth = request.auth
-    user = User.objects.all().filter(encoded=auth)
+    user = CustomUser.objects.all().filter(encoded=auth)
     user.update(**{'encoded':'','key':'','message':'','rsa_duration':0})
     return {'message':'User Logged Out; You can sign in again using your username and password.'}

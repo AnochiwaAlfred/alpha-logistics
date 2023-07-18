@@ -8,18 +8,20 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
-@admin.register(User)
+# @admin.register(Agent)
+# @admin.register(Driver)
+# @admin.register(Vendor)
+@admin.register(CustomUser)
 class UserAdmin(BaseUserAdmin):
-# class UserAdmin(admin.ModelAdmin):
     search_fields = ['email__startswith']
-    list_display = ['email', 'account_type', 'is_staff','is_superuser']
+    list_display = ['email', 'username', 'is_staff', 'is_superuser']
     list_filter = ['is_superuser']
-    list_display_links = ['email']
+    list_display_links = ['email', 'username']
     filter_horizontal = []
     ordering = ['id']
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
-        ('Personal Info', {'fields':['account_type',]}),
+        ('Personal Info', {'fields':[]}),
         ('Permissions', {'fields':['is_staff', 'is_superuser']}),
     ]
     
@@ -38,7 +40,7 @@ class UserCreationForm(forms.ModelForm):
     password2 = forms.CharField(label="Password Confirmation", widget=forms.PasswordInput)
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = [
             'email',
         ]
@@ -63,7 +65,7 @@ class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
     
     class Meta:
-        model = User
+        model = CustomUser
         fields = '__all__'
         exclude = [
             'last_login', 
@@ -75,3 +77,69 @@ class UserChangeForm(forms.ModelForm):
             'rsa_duration'
         ]
 
+
+@admin.register(Agent)
+class AgentAdmin(UserAdmin):
+    search_fields = ['email__startswith']
+    list_display = ['email', 'username', 'is_staff', 'first_name', 'last_name']
+    list_filter = ['is_superuser']
+    list_display_links = ['email', 'username']
+    filter_horizontal = []
+    ordering = ['id']
+    fieldsets = [
+        (None, {'fields': ['email', 'password']}),
+        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'address']}),
+        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+    ]
+    
+    def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
+        coded = str(uuid.uuid4()).replace("-", "")[:4]
+        code = f"bom{coded}"
+        obj.code = code
+        obj.save()
+        return super().response_add(request, obj, post_url_continue)
+        
+    
+
+@admin.register(Driver)
+class DriverAdmin(UserAdmin):
+    search_fields = ['email__startswith']
+    list_display = ['email', 'username', 'is_staff', 'first_name', 'last_name']
+    list_filter = ['is_superuser']
+    list_display_links = ['email', 'username']
+    filter_horizontal = []
+    ordering = ['id']
+    fieldsets = [
+        (None, {'fields': ['email', 'password']}),
+        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'gender', 'address']}),
+        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+    ]
+    
+    def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
+        coded = str(uuid.uuid4()).replace("-", "")[:4]
+        code = f"bom{coded}"
+        obj.code = code
+        obj.save()
+        return super().response_add(request, obj, post_url_continue)
+        
+    
+@admin.register(Vendor)
+class VendorAdmin(UserAdmin):
+    search_fields = ['email__startswith']
+    list_display = ['email', 'username', 'is_staff', 'first_name', 'last_name']
+    list_filter = ['is_superuser']
+    list_display_links = ['email', 'username']
+    filter_horizontal = []
+    ordering = ['id']
+    fieldsets = [
+        (None, {'fields': ['email', 'password']}),
+        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'gender', 'address', 'country']}),
+        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+    ]
+    
+    def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
+        coded = str(uuid.uuid4()).replace("-", "")[:4]
+        code = f"bom{coded}"
+        obj.code = code
+        obj.save()
+        return super().response_add(request, obj, post_url_continue)
