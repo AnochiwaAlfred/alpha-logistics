@@ -1,0 +1,16 @@
+ENGINE = django.db.backends.postgresql_psycopg2
+DATABASE_NAME = kingskids
+DATABASE_USER = postgres
+DATABASE_PASS = odoo
+
+ENVIRONMENT = development
+
+
+# parkway login details
+userName=0000269211
+password=94f419b7d4c1fbf1ff4cfd4e3135a2f0350c97acc36e2921138c6f78d27d94be
+sessionLength=43800
+parkway_base_url = https://sandbox.readycashng.com:8447
+
+SERPER_TOKEN_KEY=df30c13fc7254a108cfd6740fbe97225283c7bfe
+                
