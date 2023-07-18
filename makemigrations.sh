@@ -1,7 +1,6 @@
 python3 manage.py makemigrations authuser
 python3 manage.py makemigrations cargo_types
 python3 manage.py makemigrations categories
-python3 manage.py makemigrations core
 python3 manage.py makemigrations dispatch
 python3 manage.py makemigrations kyc
 python3 manage.py makemigrations orders
