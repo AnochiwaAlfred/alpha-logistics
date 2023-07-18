@@ -27,7 +27,6 @@ ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'authuser.CustomUser'
 
 INSTALLED_APPS = [
-    'jazzmin',
     'django.contrib.admin',
     'authuser', 
     'core',
