@@ -9,4 +9,4 @@ class CoreBaseModel(models.Model):
     
     
     class Meta:
-        abstract:True
+        abstract = True
