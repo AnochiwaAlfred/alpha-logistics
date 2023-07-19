@@ -1,1 +1,0 @@
-from cargo_types.admin.cargo_type import *

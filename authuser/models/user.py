@@ -5,7 +5,6 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 from django.utils import timezone
-from django_countries import countries
 
 
 class CustomUserManager(UserManager):
@@ -36,6 +35,8 @@ class CustomUserManager(UserManager):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(('email address'), unique=True, error_messages="Email Already Taken")
     password = models.CharField(max_length=200)
+    phone = models.CharField(blank=False, max_length=15)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=timezone.now())
@@ -79,14 +80,12 @@ GENDER = (
 )
 
 
-COUNTRY = tuple([(code, name) for code, name in countries])
 
 
 
 class Agent(CustomUser):
     first_name = models.CharField(blank=False, max_length=50)
     last_name = models.CharField(blank=False, max_length=50)
-    phone = models.CharField(blank=False, max_length=15)
     address = models.TextField(blank=False)
     
     def save(self):
@@ -95,6 +94,17 @@ class Agent(CustomUser):
             self.is_active=True
             self.is_staff=True
         super().save()
+        
+        
+class Client(CustomUser):
+    first_name = models.CharField(blank=False, max_length=50)
+    address = models.TextField(blank=False)
+    
+    def save(self):
+        if not len(self.password) > 20:
+            super().set_password(self.password)
+            self.is_active=True
+        super().save()
     
 
 
@@ -102,15 +112,14 @@ class Driver(CustomUser):
     first_name = models.CharField(blank=False, max_length=50)
     last_name = models.CharField(blank=False, max_length=50)
     gender = models.CharField(max_length=6, choices=GENDER, blank=False)
-    phone = models.CharField(blank=False, max_length=15)
     address = models.TextField(blank=False)
     
-    # def save(self):
-    #     if not len(self.password) > 20:
-    #         super().set_password(self.password)
-    #         self.is_active=True
-    #         self.is_staff=True
-#         super().save()
+    def save(self):
+        if not len(self.password) > 20:
+            super().set_password(self.password)
+            self.is_active=True
+            self.is_staff=True
+        super().save()
 
 
 
@@ -118,14 +127,12 @@ class Vendor(CustomUser):
     first_name = models.CharField(blank=False, max_length=50)
     last_name = models.CharField(blank=False, max_length=50)
     gender = models.CharField(max_length=6, choices=GENDER, blank=False)
-    phone = models.CharField(blank=False, max_length=15)
     address = models.TextField(blank=False)
-    country = models.CharField(verbose_name='Country', max_length=200, choices=COUNTRY)
     
-    # def save(self):
-    #     if not len(self.password) > 20:
-    #         super().set_password(self.password)
-    #         self.is_active=True
-    #         self.is_staff=True
-#         super().save()
+    def save(self):
+        if not len(self.password) > 20:
+            super().set_password(self.password)
+            self.is_active=True
+            self.is_staff=True
+        super().save()
             

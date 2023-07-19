@@ -1,1 +1,0 @@
-from cargo_types.views.cargo_type import *

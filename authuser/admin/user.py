@@ -101,6 +101,31 @@ class AgentAdmin(UserAdmin):
         
     
 
+
+@admin.register(Client)
+class ClientAdmin(UserAdmin):
+    search_fields = ['email__startswith']
+    list_display = ['email', 'username', 'is_staff']
+    list_filter = ['is_superuser']
+    list_display_links = ['email', 'username']
+    filter_horizontal = []
+    ordering = ['id']
+    fieldsets = [
+        (None, {'fields': ['email', 'password']}),
+        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'address']}),
+        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+    ]
+    
+    def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
+        coded = str(uuid.uuid4()).replace("-", "")[:4]
+        code = f"bom{coded}"
+        obj.code = code
+        obj.save()
+        return super().response_add(request, obj, post_url_continue)    
+
+
+
+
 @admin.register(Driver)
 class DriverAdmin(UserAdmin):
     search_fields = ['email__startswith']
@@ -133,7 +158,7 @@ class VendorAdmin(UserAdmin):
     ordering = ['id']
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
-        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'gender', 'address', 'country']}),
+        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'gender', 'address']}),
         ('Permissions', {'fields':['is_staff', 'is_superuser']}),
     ]
     
