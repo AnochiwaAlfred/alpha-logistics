@@ -25,7 +25,10 @@ class GlobalAuth(HttpBearer):
             return foundUser.encoded
       
 api = NinjaAPI(auth=GlobalAuth())
+<<<<<<< HEAD
 # api = NinjaAPI()
+=======
+>>>>>>> 70aa3c70037c5afd227373c14d0fbb16dc7b7a59
 
 
 api.add_router("/auth/", auth_router)
