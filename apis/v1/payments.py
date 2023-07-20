@@ -1,8 +1,8 @@
-from ninja import Router
+from ninja import Router, Form
 from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.payments import *
 from payments.models.payments import *
-from authuser.models import CustomUser
+from authuser.models import Client
 from orders.models import Order
 from typing import List
 
@@ -11,12 +11,10 @@ router = Router(tags=['Payments'])
 
 
 @router.post('/add', response=PaymentOutSchema)
-def add_payment(request, user_id, order_id):
-    user = get_object_or_404(CustomUser, id=user_id)
-    order = get_object_or_404(Order, id=order_id)
+def add_payment(request, data:PaymentInSchema=Form(...)):
+    order_id = Order.objects.filter(id=data.dict().get('order_id'))[0]
     payment = Payment.objects.create()
-    payment.order_id = order
-    payment.user_id = user
+    payment.order_id = order_id
     payment.save()
     return payment
 
@@ -33,14 +31,10 @@ def list_payment(request):
 
 
 @router.put('/change/{id}', response=PaymentOutSchema)
-def update_payment(request, id, user_id=None, order_id=None):
-    payment = get_object_or_404(Payment, id=id)
-    if user_id!=None:
-        user = get_object_or_404(CustomUser, id=user_id)
-        payment.user_id=user
-    if order_id!=None:
-        order = get_object_or_404(Order, id=order_id)
-        payment.order_id=order
+def update_payment(request, id, data:PaymentInSchema):
+    order_id = Order.objects.filter(id=data.dict().get('order_id'))[0]
+    payment = Payment.objects.filter(id=id)
+    payment.order_id = order_id
     payment.save()
     return payment
 

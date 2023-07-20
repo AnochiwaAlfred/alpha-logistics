@@ -14,15 +14,15 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 @admin.register(CustomUser)
 class UserAdmin(BaseUserAdmin):
     search_fields = ['email__startswith']
-    list_display = ['email', 'username', 'is_staff', 'is_superuser']
+    list_display = ['id', 'email', 'username', 'is_staff', 'is_superuser']
     list_filter = ['is_superuser']
     list_display_links = ['email', 'username']
     filter_horizontal = []
     ordering = ['id']
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
-        ('Personal Info', {'fields':[]}),
-        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+        ('Personal Info', {'fields':['username', 'phone']}),
+        ('Permissions', {'fields':['is_active', 'is_staff', 'is_superuser']}),
     ]
     
     def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
@@ -81,7 +81,7 @@ class UserChangeForm(forms.ModelForm):
 @admin.register(Agent)
 class AgentAdmin(UserAdmin):
     search_fields = ['email__startswith']
-    list_display = ['email', 'username', 'is_staff', 'first_name', 'last_name']
+    list_display = ['id', 'email', 'username', 'is_staff', 'first_name', 'last_name']
     list_filter = ['is_superuser']
     list_display_links = ['email', 'username']
     filter_horizontal = []
@@ -89,7 +89,7 @@ class AgentAdmin(UserAdmin):
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
         ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'address']}),
-        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+        ('Permissions', {'fields':['is_active', 'is_staff', 'is_superuser']}),
     ]
     
     def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
@@ -105,15 +105,15 @@ class AgentAdmin(UserAdmin):
 @admin.register(Client)
 class ClientAdmin(UserAdmin):
     search_fields = ['email__startswith']
-    list_display = ['email', 'username', 'is_staff']
+    list_display = ['id', 'email', 'username', 'is_staff']
     list_filter = ['is_superuser']
     list_display_links = ['email', 'username']
     filter_horizontal = []
     ordering = ['id']
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
-        ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'address']}),
-        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+        ('Personal Info', {'fields':['first_name', 'phone', 'address']}),
+        ('Permissions', {'fields':['is_active', 'is_staff', 'is_superuser']}),
     ]
     
     def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
@@ -129,7 +129,7 @@ class ClientAdmin(UserAdmin):
 @admin.register(Driver)
 class DriverAdmin(UserAdmin):
     search_fields = ['email__startswith']
-    list_display = ['email', 'username', 'is_staff', 'first_name', 'last_name']
+    list_display = ['id', 'email', 'username', 'is_staff', 'first_name', 'last_name']
     list_filter = ['is_superuser']
     list_display_links = ['email', 'username']
     filter_horizontal = []
@@ -137,7 +137,7 @@ class DriverAdmin(UserAdmin):
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
         ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'gender', 'address']}),
-        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+        ('Permissions', {'fields':['is_active', 'is_staff', 'is_superuser']}),
     ]
     
     def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:
@@ -151,7 +151,7 @@ class DriverAdmin(UserAdmin):
 @admin.register(Vendor)
 class VendorAdmin(UserAdmin):
     search_fields = ['email__startswith']
-    list_display = ['email', 'username', 'is_staff', 'first_name', 'last_name']
+    list_display = ['id', 'email', 'username', 'is_staff', 'first_name', 'last_name']
     list_filter = ['is_superuser']
     list_display_links = ['email', 'username']
     filter_horizontal = []
@@ -159,7 +159,7 @@ class VendorAdmin(UserAdmin):
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
         ('Personal Info', {'fields':['first_name', 'last_name', 'phone', 'gender', 'address']}),
-        ('Permissions', {'fields':['is_staff', 'is_superuser']}),
+        ('Permissions', {'fields':['is_active', 'is_staff', 'is_superuser']}),
     ]
     
     def response_add(self, request, obj, post_url_continue=None) -> HttpResponse:

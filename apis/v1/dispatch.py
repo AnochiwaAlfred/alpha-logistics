@@ -32,7 +32,7 @@ def list_dispatch(request):
 
 @router.put('/change/{id}', response=DispatchOutSchema)
 def update_dispatch(request, id, task_id=None):
-    dispatch = get_object_or_404(Dispatch, id=id)
+    dispatch = Dispatch.objects.filter(id=id)[0]
     if task_id!=None:
         task_id = get_object_or_404(Task, id=task_id)
         dispatch.task_id=task_id

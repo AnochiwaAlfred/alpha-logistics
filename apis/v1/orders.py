@@ -1,20 +1,20 @@
-from ninja import Router
+from ninja import Router, Form
 from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.orders import *
 from orders.models.orders import *
 from products.models.products import Product
-from authuser.models import CustomUser
+from authuser.models import *
 from typing import List
 
 router = Router(tags=['Orders'])
 
 @router.post('/add', response=OrderOutSchema)
-def add_order(request, user_id, product_id):
-    user = get_object_or_404(CustomUser, id=user_id)
-    product = get_object_or_404(Product, id=product_id)
-    order = Order.objects.create()
-    order.user_id = user
-    order.product_id.add(product)
+def add_order(request, data:OrderInSchema=Form(...)):
+    client_id = get_object_or_404(Client, id=int(data.dict().get('client_id')))
+    product_id = get_object_or_404(Product, id=uuid.UUID(data.dict().get('product_id')))
+    order = Order.objects.create(quantity=data.dict().get('quantity'))
+    order.client_id = client_id
+    order.product_id = product_id
     order.save()
     return order
 
@@ -31,14 +31,14 @@ def list_order(request):
 
 
 @router.put('/change/{id}', response=OrderOutSchema)
-def update_order(request, id, user_id=None, product_id=None):
-    order = get_object_or_404(Order, id=id)
-    if user_id!=None:
-        user = get_object_or_404(CustomUser, id=user_id)
-        order.user_id=user
-    if product_id!=None:
-        product = get_object_or_404(Product, id=product_id)
-        order.product_id=product
+def update_order(request, id, data:OrderInSchema):
+    order = Order.objects.filter(id=id)[0]
+    client_id = get_object_or_404(Client, id=int(data.dict().get('client_id')))
+    product_id = get_object_or_404(Product, id=uuid.UUID(data.dict().get('product_id')))
+    order.quantity = data.dict().get('quantity')
+    order.client_id = client_id
+    order.product_id = product_id
+    order.save()
     order.save()
     return order
 

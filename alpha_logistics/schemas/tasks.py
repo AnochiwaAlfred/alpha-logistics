@@ -2,11 +2,16 @@
 from ninja import Schema
 import uuid
 from alpha_logistics.schemas.orders import OrderOutSchema
-from alpha_logistics.schemas.cargo_type import CargoTypeOutSchema
+from alpha_logistics.schemas.auth import AuthOutSchema
 from typing import List
+
+
+class TaskInSchema(Schema):
+    order_id:List[str]
+    driver_id:str
 
 class TaskOutSchema(Schema):
     id:uuid.UUID
     order_id:List[OrderOutSchema]=None
-    cargo_type:CargoTypeOutSchema=None
+    driver_id:AuthOutSchema=None
     

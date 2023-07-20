@@ -18,13 +18,13 @@ def get_category(request, id):
     return category
 
 @router.get('/list', response=List[CategoryOutSchema])
-def list_categorys(request):
+def list_categories(request):
     d_list = Category.objects.all()
     return d_list
 
 @router.put('/change/{id}', response=CategoryOutSchema)
 def update_category(request, id, data:CategoryInSchema):
-    category = get_object_or_404(Category, id=id)
+    category = Category.objects.filter(id=id)[0]
     for attr, value in data.dict().items():
         setattr(category, attr, value)
     category.save()
@@ -34,4 +34,4 @@ def update_category(request, id, data:CategoryInSchema):
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id)
     category.delete()
-    return f"Cargo Type {category.name} deleted successfully"
+    return f"Category {category.name} deleted successfully"
