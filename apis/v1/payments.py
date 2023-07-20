@@ -33,7 +33,7 @@ def list_payment(request):
 @router.put('/change/{id}', response=PaymentOutSchema)
 def update_payment(request, id, data:PaymentInSchema):
     order_id = Order.objects.filter(id=data.dict().get('order_id'))[0]
-    payment = Payment.objects.filter(id=id)
+    payment = Payment.objects.filter(id=id)[0]
     payment.order_id = order_id
     payment.save()
     return payment
