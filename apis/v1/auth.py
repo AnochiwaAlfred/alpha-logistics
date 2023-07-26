@@ -39,8 +39,6 @@ def get_token(request, username: str = Form(...), password: str = Form(...)):
         # User is authenticated
 
 
-# anochiwaalfred@gmail.com
-# Alfieolli
 @router.get("/verify-token/{otp}", auth=None)  # < overriding global auth
 def verify_token_code(request, otp:str):
     """

@@ -144,3 +144,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # LOGIN_URL = '/authuser/login/'
 # LOGIN_REDIRECT_URL = '/'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
+# Ninja API
+
+NINJA_PAGINATION_PER_PAGE = 5
+

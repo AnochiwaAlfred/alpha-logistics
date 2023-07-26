@@ -1,5 +1,5 @@
 from ninja import Schema
-from alpha_logistics.schemas.auth import AuthOutSchema
+from alpha_logistics.schemas.auth import *
 from alpha_logistics.schemas.products import ProductOutSchema
 import uuid
 
@@ -12,7 +12,7 @@ class OrderInSchema(Schema):
 class OrderOutSchema(Schema):
     id:uuid.UUID
     quantity:int
-    client_id:AuthOutSchema=None
+    client_id:ClientOutSchema=None
     product_id:ProductOutSchema=None
     
     # 10d272e0-f661-4b4a-9be4-693a14b0c862

@@ -1,4 +1,5 @@
 from ninja import Router, Form
+# from ninja.pagination import paginate, LimitOffsetPagination
 from django.shortcuts import get_object_or_404
 from alpha_logistics.schemas.products import *
 from products.models.products import *
@@ -26,8 +27,8 @@ def get_product(request, id):
     product = get_object_or_404(Product, id=id)
     return product
 
-
 @router.get('/list', response=List[ProductOutSchema])
+# @paginate(LimitOffsetPagination)
 def list_product(request):
     products = Product.objects.all()
     return products
